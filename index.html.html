@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Audit Toko Retail - Full</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root{--bg:#f4f6f9;--card:#fff;--primary:#0b74d1}
+    body { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; padding: 16px; background: var(--bg); color:#1f2937 }
+    h1 { text-align: center; color: #111827; margin-bottom: 12px; font-size: 20px }
+    h2 { margin-top: 18px; color: #111827; font-size:16px }
+    h3 { margin-top: 12px; color: #374151; font-size:14px }
+    .card { background: var(--card); padding: 14px; margin: 12px 0; border-radius: 12px; box-shadow: 0 6px 18px rgba(15,23,42,0.06); }
+    label { display: block; margin: 6px 0; font-size: 13px }
+    input[type="checkbox"]{transform:scale(1.05); margin-right:8px}
+    .top-row{display:flex;gap:8px;flex-wrap:wrap}
+    .input-toko input { flex: 1; padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; font-size:14px }
+    .actions{display:flex;gap:8px;margin-top:12px}
+    button.primary{background:var(--primary);color:#fff;border:none;padding:11px 14px;border-radius:8px;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid #e5e7eb;padding:10px 12px;border-radius:8px;cursor:pointer}
+    table { width:100%; border-collapse: collapse; margin-top:12px; font-size:13px }
+    th,td{padding:10px;border:1px solid #e6edf3;text-align:center}
+    th{background:var(--primary);color:#fff}
+    .muted{color:#6b7280;font-size:13px}
+    .small{font-size:12px;color:#374151}
+    @media (max-width:640px){ .top-row{flex-direction:column} }
+  </style>
+</head>
+<body>
+  <h1>Simulasi Audit Toko Retail — Reguler & Fresh (Full)</h1>
+
+  <div class="card">
+    <div class="top-row input-toko">
+      <input id="kodeToko" placeholder="Kode Toko (mis. TK001)" />
+      <input id="namaToko" placeholder="Nama Toko (mis. Toko Sejahtera)" />
+    </div>
+    <div class="actions">
+      <button class="primary" onclick="document.getElementById('auditForm').scrollIntoView({behavior:'smooth'})">Mulai Audit</button>
+      <button class="ghost" onclick="resetForm()">Reset Semua</button>
+    </div>
+    <p class="muted">Isi Kode & Nama Toko terlebih dahulu agar hasil tersimpan per toko saat download CSV.</p>
+  </div>
+
+  <form id="auditForm">
+
+    <!-- PEOPLE -->
+    <div class="card">
+      <h2>People (10%)</h2>
+      <h3>Reguler</h3>
+      <label><input type="checkbox" name="people_reg"> 1. Seragam/Penampilan Reguler</label>
+      <label><input type="checkbox" name="people_reg"> 2. Tanda Pengenal ID Card Reguler</label>
+      <label><input type="checkbox" name="people_reg"> 3. Tatap Salam Sapa dan Terimakasih</label>
+      <label><input type="checkbox" name="people_reg"> 4. Inisiatif Penawaran dan Pelayanan</label>
+      <label><input type="checkbox" name="people_reg"> 5. Jumlah Personil Sesuai Standar Reguler</label>
+      <label><input type="checkbox" name="people_reg"> 6. Knowledge SPD, STD, APC (Crew)</label>
+      <label><input type="checkbox" name="people_reg"> 7. Knowledge Planogram Reguler (Crew)</label>
+      <label><input type="checkbox" name="people_reg"> 8. Knowledge Penerimaan Barang Reguler (Crew)</label>
+      <label><input type="checkbox" name="people_reg"> 9. Knowledge Cek RH & Kadaluwarsa (Crew)</label>
+      <label><input type="checkbox" name="people_reg"> 10. Knowledge FEFO/FIFO Reguler (Crew)</label>
+      <label><input type="checkbox" name="people_reg"> 11. Knowledge Program Promosi (Crew)</label>
+      <label><input type="checkbox" name="people_reg"> 12. Knowledge Penggunaan APAR (Crew)</label>
+      <label><input type="checkbox" name="people_reg"> 13. Knowledge Penggunaan Genset (Crew)</label>
+      <label><input type="checkbox" name="people_reg"> 14. Knowledge SPD, STD, APC, GM (Pejabat)</label>
+      <label><input type="checkbox" name="people_reg"> 15. Knowledge AHO (Pejabat)</label>
+      <label><input type="checkbox" name="people_reg"> 16. Knowledge SOVO (Pejabat)</label>
+      <label><input type="checkbox" name="people_reg"> 17. Knowledge APAR (Pejabat)</label>
+      <label><input type="checkbox" name="people_reg"> 18. Knowledge Genset (Pejabat)</label>
+      <label><input type="checkbox" name="people_reg"> 19. Knowledge SMKI (Pejabat)</label>
+      <label><input type="checkbox" name="people_reg"> 20. Knowledge SO Partial/PDA (Pejabat)</label>
+      <label><input type="checkbox" name="people_reg"> 21. Knowledge Mutasi Asset (Pejabat)</label>
+      <label><input type="checkbox" name="people_reg"> 22. Knowledge Tata Arsip (Pejabat)</label>
+      <label><input type="checkbox" name="people_reg"> 23. Penggunaan PIN & Password POS, E-Trans & OTP Reguler</label>
+      <label><input type="checkbox" name="people_reg"> 24. Validitas Tutup Shift</label>
+      <label><input type="checkbox" name="people_reg"> 25. Validitas Absensi</label>
+      <label><input type="checkbox" name="people_reg"> 26. Validitas Transaksi Non Tunai</label>
+      <label><input type="checkbox" name="people_reg"> 27. Validitas SO Partial</label>
+      <label><input type="checkbox" name="people_reg"> 28. Validitas Laporan Catatan vs uang Brankas</label>
+      <label><input type="checkbox" name="people_reg"> 29. Validitas Laporan Setoran Penjualan</label>
+
+      <h3>Fresh</h3>
+      <label><input type="checkbox" name="people_fresh"> 1. Seragam/Penampilan Fresh</label>
+      <label><input type="checkbox" name="people_fresh"> 2. Tanda Pengenal/ID Card Fresh</label>
+      <label><input type="checkbox" name="people_fresh"> 3. Jumlah Personil Sesuai Standard Fresh</label>
+      <label><input type="checkbox" name="people_fresh"> 4. Knowledge Planogram Fresh</label>
+      <label><input type="checkbox" name="people_fresh"> 5. Knowledge Penerimaan Barang WH/BKL Fresh</label>
+      <label><input type="checkbox" name="people_fresh"> 6. Knowledge Stock Opname Fresh Food</label>
+      <label><input type="checkbox" name="people_fresh"> 7. Knowledge Terlambat Retur & Kadaluwarsa</label>
+      <label><input type="checkbox" name="people_fresh"> 8. FEFO/FIFO Fresh</label>
+      <label><input type="checkbox" name="people_fresh"> 9. Knowledge OFO</label>
+      <label><input type="checkbox" name="people_fresh"> 10. Knowledge Pemusnahan Fresh Food</label>
+      <label><input type="checkbox" name="people_fresh"> 11. Knowledge Repacking Fresh Food</label>
+      <label><input type="checkbox" name="people_fresh"> 12. Aktivitas Harian & Handling Product Fresh</label>
+      <label><input type="checkbox" name="people_fresh"> 13. Penggunaan PIN, Password & OTP Fresh</label>
+      <label><input type="checkbox" name="people_fresh"> 14. Validitas Input OFO</label>
+      <label><input type="checkbox" name="people_fresh"> 15. Validitas Stock Product Fresh Food</label>
+      <label><input type="checkbox" name="people_fresh"> 16. Validitas Pemusnahan</label>
+      <label><input type="checkbox" name="people_fresh"> 17. Validitas Repacking/Cut Fruit</label>
+    </div>
+
+    <!-- PROCESS -->
+    <div class="card">
+      <h2>Process (40%)</h2>
+      <h3>Reguler</h3>
+      <label><input type="checkbox" name="process_reg"> 1. Update Price tag</label>
+      <label><input type="checkbox" name="process_reg"> 2. Optimalisasi Rak</label>
+      <label><input type="checkbox" name="process_reg"> 3. Pencatatan Retur/Void Penjualan</label>
+      <label><input type="checkbox" name="process_reg"> 4. Kadaluwarsa</label>
+      <label><input type="checkbox" name="process_reg"> 5. Monitoring Tenant Online & AHO</label>
+      <label><input type="checkbox" name="process_reg"> 6. Kesesuaian Kelengkapan Tenant</label>
+      <label><input type="checkbox" name="process_reg"> 7. Kesesuaian Kelengkapan AHO</label>
+      <label><input type="checkbox" name="process_reg"> 8. SOVO</label>
+      <label><input type="checkbox" name="process_reg"> 9. Tata Arsip Odner</label>
+      <label><input type="checkbox" name="process_reg"> 10. Tata Arsip Map Acco</label>
+      <label><input type="checkbox" name="process_reg"> 11. Tata Arsip Buku Ekspedisi atau Buku Tulis Biasa</label>
+      <label><input type="checkbox" name="process_reg"> 12. Penataan Barang Dagangan Good Stock</label>
+      <label><input type="checkbox" name="process_reg"> 13. Penataan Barang Dagangan Bad Stock</label>
+      <label><input type="checkbox" name="process_reg"> 14. Kelengkapan dan Kesesuaian Uang Setoran Penjualan</label>
+      <label><input type="checkbox" name="process_reg"> 15. Kelengkapan dan Kesesuaian Uang Modal</label>
+
+      <h3>Fresh</h3>
+      <label><input type="checkbox" name="process_fresh"> 1. Administrasi Buku Aktivitas Harian Fresh</label>
+      <label><input type="checkbox" name="process_fresh"> 2. Administrasi Repacking</label>
+      <label><input type="checkbox" name="process_fresh"> 3. Administrasi OFO</label>
+      <label><input type="checkbox" name="process_fresh"> 4. Administrasi Repacking</label>
+      <label><input type="checkbox" name="process_fresh"> 5. Administrasi Pemusnahan</label>
+      <label><input type="checkbox" name="process_fresh"> 6. Administrasi Stock Opname Fresh Food</label>
+      <label><input type="checkbox" name="process_fresh"> 7. Administrasi Penerimaan Barang dari WH</label>
+      <label><input type="checkbox" name="process_fresh"> 8. Administrasi Penerimaan Barang dari BKL/Supplier</label>
+    </div>
+
+    <!-- PRODUCT -->
+    <div class="card">
+      <h2>Product (40%)</h2>
+      <h3>Reguler</h3>
+      <label><input type="checkbox" name="product_reg"> 1. Planogram</label>
+      <label><input type="checkbox" name="product_reg"> 2. FEFO/FIFO</label>
+      <label><input type="checkbox" name="product_reg"> 3. Kemasan</label>
+      <label><input type="checkbox" name="product_reg"> 4. Kualitas</label>
+      <label><input type="checkbox" name="product_reg"> 5. Kebersihan</label>
+      <label><input type="checkbox" name="product_reg"> 6. Floor Display</label>
+      <label><input type="checkbox" name="product_reg"> 7. Terlambat Retur Food dan Non Food</label>
+      <label><input type="checkbox" name="product_reg"> 8. Kadaluwarsa Food</label>
+      <label><input type="checkbox" name="product_reg"> 9. Kadaluwarsa Non Food</label>
+      <label><input type="checkbox" name="product_reg"> 10. Kondisi Kesesuaian, Peletakkan dan Kelengkapan Price</label>
+      <label><input type="checkbox" name="product_reg"> 11. Kesesuaian Price Tag dan Master Harga</label>
+      <label><input type="checkbox" name="product_reg"> 12. Pemasangan POP Non Promosi</label>
+      <label><input type="checkbox" name="product_reg"> 13. POP dan Media Promosi</label>
+      <label><input type="checkbox" name="product_reg"> 14. Kelengkapan dan Kerapian</label>
+      <label><input type="checkbox" name="product_reg"> 15. Kesesuaian Display Media Promosi</label>
+      <label><input type="checkbox" name="product_reg"> 16. Penanganan Pasca Program Promosi</label>
+      <label><input type="checkbox" name="product_reg"> 17. Kesesuaian Harga dengan POS dan Media Promosi</label>
+      <label><input type="checkbox" name="product_reg"> 18. Sarana Sewa In Store</label>
+
+      <h3>Fresh</h3>
+      <label><input type="checkbox" name="product_fresh"> 1. Kebersihan dan Kualitas Buah/Sayur dan Bumbu Dapur</label>
+      <label><input type="checkbox" name="product_fresh"> 2. Kebersihan dan Kualitas Dairy, Deli, dan Frozen Food</label>
+      <label><input type="checkbox" name="product_fresh"> 3. Kebersihan dan Kualitas Telur</label>
+      <label><input type="checkbox" name="product_fresh"> 4. Kebersihan dan Kualitas Daging Sapi, Ayam & Seafood</label>
+      <label><input type="checkbox" name="product_fresh"> 5. Terlambat Retur</label>
+      <label><input type="checkbox" name="product_fresh"> 6. Kadaluwarsa</label>
+      <label><input type="checkbox" name="product_fresh"> 7. Planogram</label>
+      <label><input type="checkbox" name="product_fresh"> 8. Price Tag dan POP</label>
+    </div>
+
+    <!-- PLACE -->
+    <div class="card">
+      <h2>Place (10%)</h2>
+      <h3>Reguler</h3>
+      <label><input type="checkbox" name="place_reg"> 1. Kebersihan dan Kerapian Halaman Parkir</label>
+      <label><input type="checkbox" name="place_reg"> 2. Kebersihan dan Kerapian Teras</label>
+      <label><input type="checkbox" name="place_reg"> 3. Kebersihan dan Kerapian Area Penjualan</label>
+      <label><input type="checkbox" name="place_reg"> 4. Kebersihan dan Kerapian Area Kasir</label>
+      <label><input type="checkbox" name="place_reg"> 5. Kebersihan dan Kerapian Gudang</label>
+      <label><input type="checkbox" name="place_reg"> 6. Kebersihan dan Kerapian Selasar</label>
+      <label><input type="checkbox" name="place_reg"> 7. Kebersihan dan Kerapian Kantor</label>
+      <label><input type="checkbox" name="place_reg"> 8. Kebersihan dan Kerapian Mess</label>
+      <label><input type="checkbox" name="place_reg"> 9. Kebersihan dan Kerapian Dapur</label>
+      <label><input type="checkbox" name="place_reg"> 10. Kebersihan dan Kerapian Toilet/Kamar Mandi</label>
+      <label><input type="checkbox" name="place_reg"> 11. Kebersihan dan Kerapian Rak, Chiller, Sarana Sewa dan Perlengkapan Lainnya</label>
+
+      <h3>Fresh</h3>
+      <label><input type="checkbox" name="place_fresh"> 1. Kebersihan dan Kerapian Chiller, Freezer, Kontainer, Rak Buah, dan Meja Display</label>
+      <label><input type="checkbox" name="place_fresh"> 2. Kebersihan dan Kerapian Perlengkapan dan Peralatan Mendukung</label>
+      <label><input type="checkbox" name="place_fresh"> 3. Standard Suhu Chiller dan Freezer</label>
+      <label><input type="checkbox" name="place_fresh"> 4. Ketersediaan Perlengkapan dan Peralatan Fresh Food</label>
+    </div>
+
+    <div style="text-align:center;margin:10px 0">
+      <button type="button" class="primary" onclick="hitungSkor()">Hitung Skor dan Tampilkan Rekap</button>
+    </div>
+  </form>
+
+  <div id="hasil"></div>
+
+  <script>
+    function resetForm(){
+      if(!confirm('Reset semua checklist?')) return;
+      document.getElementById('auditForm').reset();
+      document.getElementById('hasil').innerHTML = '';
+    }
+
+    function hitungSkor(){
+      const kode = document.getElementById('kodeToko').value.trim();
+      const nama = document.getElementById('namaToko').value.trim();
+      if(!kode || !nama){ alert('Isi Kode Toko & Nama Toko dulu.'); return; }
+
+      const bobot = { people:0.1, product:0.4, process:0.4, place:0.1 };
+      const pilars = ['people','product','process','place'];
+      let rekapReg = [], rekapFresh = [];
+      let totalReg = 0, totalFresh = 0;
+
+      pilars.forEach(p => {
+        const checksReg = Array.from(document.querySelectorAll(`input[name=${p}_reg]`));
+        const totalRegChecks = checksReg.length;
+        const yesReg = checksReg.filter(c=>c.checked).length;
+        const persenReg = totalRegChecks? (yesReg/totalRegChecks*100):0;
+        const skorReg = (persenReg * bobot[p]).toFixed(2);
+        totalReg += parseFloat(skorReg);
+        rekapReg.push({pilar:p, total:totalRegChecks, yes:yesReg, persen: persenReg.toFixed(2), skor: skorReg});
+
+        const checksFresh = Array.from(document.querySelectorAll(`input[name=${p}_fresh]`));
+        const totalFreshChecks = checksFresh.length;
+        const yesFresh = checksFresh.filter(c=>c.checked).length;
+        const persenFresh = totalFreshChecks? (yesFresh/totalFreshChecks*100):0;
+        const skorFresh = (persenFresh * bobot[p]).toFixed(2);
+        totalFresh += parseFloat(skorFresh);
+        rekapFresh.push({pilar:p, total:totalFreshChecks, yes:yesFresh, persen: persenFresh.toFixed(2), skor: skorFresh});
+      });
+
+      // build HTML
+      let html = `<div class="card"><h2>Hasil Audit — ${kode} / ${nama}</h2>`;
+      html += `<div class="small">Tanggal: ${new Date().toLocaleString()}</div>`;
+
+      html += `<h3>Reguler</h3>`;
+      html += buatTabel(rekapReg, totalReg);
+      html += `<h3>Fresh</h3>`;
+      html += buatTabel(rekapFresh, totalFresh);
+
+      html += `<div style="display:flex;gap:8px;margin-top:12px"><button class=\"primary\" onclick=\"downloadCSV('${kode}','${nama}')\">Download CSV</button><button class=\"ghost\" onclick=\"copySummary()\">Copy Ringkasan</button></div>`;
+      html += `</div>`;
+
+      document.getElementById('hasil').innerHTML = html;
+
+      // store for download
+      window.__auditResult = {kode,nama,rekapReg,totalReg,rekapFresh,totalFresh};
+    }
+
+    function buatTabel(rekap,total){
+      let t = '<table><thead><tr><th>Pilar</th><th>Checklist</th><th>Ya</th><th>%</th><th>Skor (%)</th></tr></thead><tbody>';
+      rekap.forEach(r=>{
+        t += `<tr><td>${capitalize(r.pilar)}</td><td>${r.total}</td><td>${r.yes}</td><td>${r.persen}%</td><td>${r.skor}%</td></tr>`;
+      });
+      t += `<tr><th colspan=4>Total Skor</th><th>${total.toFixed(2)}%</th></tr>`;
+      t += '</tbody></table>';
+      return t;
+    }
+
+    function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+
+    function downloadCSV(){
+      if(!window.__auditResult){ alert('Silakan hitung skor terlebih dahulu.'); return; }
+      const r = window.__auditResult;
+      let rows = [];
+      rows.push(['Kode Toko', r.kode]);
+      rows.push(['Nama Toko', r.nama]);
+      rows.push(['Tanggal', new Date().toLocaleString()]);
+      rows.push([]);
+      rows.push(['Reguler']);
+      rows.push(['Pilar','Checklist','Ya','%','Skor (%)']);
+      r.rekapReg.forEach(x=> rows.push([capitalize(x.pilar), x.total, x.yes, x.persen, x.skor]));
+      rows.push(['Total Skor', '', '', '', r.totalReg.toFixed(2)+'%']);
+      rows.push([]);
+      rows.push(['Fresh']);
+      rows.push(['Pilar','Checklist','Ya','%','Skor (%)']);
+      r.rekapFresh.forEach(x=> rows.push([capitalize(x.pilar), x.total, x.yes, x.persen, x.skor]));
+      rows.push(['Total Skor', '', '', '', r.totalFresh.toFixed(2)+'%']);
+
+      const csvContent = rows.map(r=> r.map(cell=> '"'+String(cell).replace(/"/g,'""')+'"').join(',')).join('
+');
+      const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      const safeName = (r.kode+'_'+r.nama).replace(/[^a-z0-9-_\.]/ig,'_');
+      link.download = `Audit_${safeName}.csv`;
+      link.click();
+    }
+
+    function copySummary(){
+      if(!window.__auditResult){ alert('Silakan hitung skor terlebih dahulu.'); return; }
+      const r = window.__auditResult;
+      let text = `Audit ${r.kode} / ${r.nama}
+Tanggal: ${new Date().toLocaleString()}
+
+REGULER:
+`;
+      r.rekapReg.forEach(x=> text += `${capitalize(x.pilar)}: ${x.skor}% (${x.yes}/${x.total})
+`);
+      text += `Total Reguler: ${r.totalReg.toFixed(2)}%
+
+FRESH:
+`;
+      r.rekapFresh.forEach(x=> text += `${capitalize(x.pilar)}: ${x.skor}% (${x.yes}/${x.total})
+`);
+      text += `Total Fresh: ${r.totalFresh.toFixed(2)}%`;
+      navigator.clipboard.writeText(text).then(()=> alert('Ringkasan disalin ke clipboard'));
+    }
+  </script>
+</body>
+</html>
