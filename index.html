@@ -236,7 +236,7 @@
       html += `<h3>Fresh</h3>`;
       html += buatTabel(rekapFresh, totalFresh);
 
-      html += `<div style="display:flex;gap:8px;margin-top:12px"><button class=\"primary\" onclick=\"downloadCSV('${kode}','${nama}')\">Download CSV</button><button class=\"ghost\" onclick=\"copySummary()\">Copy Ringkasan</button></div>`;
+      html += '<div style="display:flex;gap:8px;margin-top:12px"><button class="primary" onclick="downloadCSV()">Download CSV</button><button class="ghost" onclick="copySummary()">Copy Ringkasan</button></div>';
       html += `</div>`;
 
       document.getElementById('hasil').innerHTML = html;
@@ -275,12 +275,11 @@
       r.rekapFresh.forEach(x=> rows.push([capitalize(x.pilar), x.total, x.yes, x.persen, x.skor]));
       rows.push(['Total Skor', '', '', '', r.totalFresh.toFixed(2)+'%']);
 
-      const csvContent = rows.map(r=> r.map(cell=> '"'+String(cell).replace(/"/g,'""')+'"').join(',')).join('
-');
+      const csvContent = rows.map(row => row.map(cell => '"' + String(cell).replace(/"/g, '""') + '"').join(',')).join('\n');
       const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      const safeName = (r.kode+'_'+r.nama).replace(/[^a-z0-9-_\.]/ig,'_');
+      const safeName = (r.kode+'_'+r.nama).replace(/[^a-z0-9-_.]/ig,'_');
       link.download = `Audit_${safeName}.csv`;
       link.click();
     }
@@ -288,19 +287,10 @@
     function copySummary(){
       if(!window.__auditResult){ alert('Silakan hitung skor terlebih dahulu.'); return; }
       const r = window.__auditResult;
-      let text = `Audit ${r.kode} / ${r.nama}
-Tanggal: ${new Date().toLocaleString()}
-
-REGULER:
-`;
-      r.rekapReg.forEach(x=> text += `${capitalize(x.pilar)}: ${x.skor}% (${x.yes}/${x.total})
-`);
-      text += `Total Reguler: ${r.totalReg.toFixed(2)}%
-
-FRESH:
-`;
-      r.rekapFresh.forEach(x=> text += `${capitalize(x.pilar)}: ${x.skor}% (${x.yes}/${x.total})
-`);
+      let text = `Audit ${r.kode} / ${r.nama}\nTanggal: ${new Date().toLocaleString()}\n\nREGULER:\n`;
+      r.rekapReg.forEach(x=> text += `${capitalize(x.pilar)}: ${x.skor}% (${x.yes}/${x.total})\n`);
+      text += `Total Reguler: ${r.totalReg.toFixed(2)}%\n\nFRESH:\n`;
+      r.rekapFresh.forEach(x=> text += `${capitalize(x.pilar)}: ${x.skor}% (${x.yes}/${x.total})\n`);
       text += `Total Fresh: ${r.totalFresh.toFixed(2)}%`;
       navigator.clipboard.writeText(text).then(()=> alert('Ringkasan disalin ke clipboard'));
     }
