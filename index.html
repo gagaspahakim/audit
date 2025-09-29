@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Simulasi Audit - Store</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 20px; }
+        .audit-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dotted #ccc; }
+        .audit-item label { flex-grow: 1; margin-right: 10px; }
+        .audit-item .options input { margin-left: 15px; }
+        .score-result { margin-top: 30px; padding: 15px; border: 2px solid #007bff; border-radius: 5px; background-color: #e9f5ff; display: none; }
+        .score-result h3 { color: #007bff; }
+        .pilar-section { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .kategori-section { margin-top: 15px; border-left: 3px solid #007bff; padding-left: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Simulasi Audit Toko</h1>
+    <p>Diisi oleh Area Coordinator atau Area Manager</p>
+    
+    <form id="auditForm">
+        <h2>Data Toko & Auditor</h2>
+        <div style="margin-bottom: 15px;">
+            <label for="kode_toko">Pilih Kode Toko:</label>
+            <select id="kode_toko" name="kode_toko" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                <option value="">-- Pilih Toko --</option>
+                </select>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label for="nama_toko">Nama Toko:</label>
+            <input type="text" id="nama_toko" name="nama_toko" readonly required style="width: 100%; padding: 8px; margin-top: 5px; background-color: #eee;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label for="auditor_name">Nama Auditor:</label>
+            <input type="text" id="auditor_name" name="auditor_name" required style="width: 100%; padding: 8px; margin-top: 5px;">
+        </div>
+
+        <h2>Checklist Audit</h2>
+        <div id="checklist-container">
+            </div>
+
+        <button type="submit" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px;">Submit & Lihat Skor</button>
+    </form>
+    
+    <div id="score-output" class="score-result">
+        <h3>Hasil Score Audit</h3>
+        <p><strong>Kode Toko:</strong> <span id="out_kode_toko"></span></p>
+        <p><strong>Nama Toko:</strong> <span id="out_nama_toko"></span></p>
+        <hr>
+        <p><strong>Score Reguler:</strong> <span id="out_score_reguler"></span></p>
+        <p><strong>Score Fresh:</strong> <span id="out_score_fresh"></span></p>
+        <p><strong>TOTAL SCORE:</strong> <span id="out_total_score"></span></p>
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
