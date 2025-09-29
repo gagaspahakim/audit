@@ -1,346 +1,64 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Audit Toko — Multi-Submit & Google Sheet</title>
-  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-  <style>
-    :root{--bg:#f7f9fc;--card:#fff;--primary:#007bff}
-    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;margin:12px;background:var(--bg);color:#0f172a}
-    h1{font-size:18px;text-align:center;margin-bottom:8px}
-    .card{background:var(--card);border-radius:10px;padding:12px;margin:10px 0;box-shadow:0 6px 18px rgba(2,6,23,0.06)}
-    label{display:block;margin:6px 0;font-size:13px}
-    input[type=text], select{width:100%;padding:8px;border-radius:8px;border:1px solid #e6eef6;box-sizing:border-box}
-    input[type=checkbox]{transform:scale(1.02);margin-right:8px}
-    .row{display:flex;gap:8px;flex-wrap:wrap}
-    .col{flex:1;min-width:160px}
-    .actions{display:flex;gap:8px;margin-top:8px}
-    button{padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-size:14px}
-    .btn-primary{background:var(--primary);color:#fff}
-    .btn-ghost{background:#fff;border:1px solid #e6eef6}
-    table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
-    th,td{padding:8px;border:1px solid #e6edf3;text-align:center}
-    th{background:var(--primary);color:#fff}
-    .muted{color:#64748b;font-size:13px}
-    .small{font-size:12px;color:#475569}
-    @media (max-width:640px){ .row{flex-direction:column} }
-    .sticky-actions{position:sticky;bottom:8px;display:flex;gap:8px;justify-content:center;padding-top:8px;background:transparent}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Simulasi Audit - Store</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 20px; }
+        .audit-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dotted #ccc; }
+        .audit-item label { flex-grow: 1; margin-right: 10px; }
+        .audit-item .options input { margin-left: 15px; }
+        .score-result { margin-top: 30px; padding: 15px; border: 2px solid #007bff; border-radius: 5px; background-color: #e9f5ff; display: none; }
+        .score-result h3 { color: #007bff; }
+        .pilar-section { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .kategori-section { margin-top: 15px; border-left: 3px solid #007bff; padding-left: 10px; }
+    </style>
 </head>
 <body>
-  <h1>Audit Toko — Reguler & Fresh (Multi-Submit)</h1>
-  <div class="card">
-    <div class="row">
-      <div class="col">
-        <label for="kodeToko">Kode Toko</label>
-        <select id="kodeToko"><option value="">-- Pilih Kode Toko --</option></select>
-      </div>
-      <div class="col">
-        <label for="namaToko">Nama Toko</label>
-        <input id="namaToko" type="text" readonly />
-      </div>
+
+<div class="container">
+    <h1>Simulasi Audit Toko</h1>
+    <p>Diisi oleh Area Coordinator atau Area Manager</p>
+    
+    <form id="auditForm">
+        <h2>Data Toko & Auditor</h2>
+        <div style="margin-bottom: 15px;">
+            <label for="kode_toko">Pilih Kode Toko:</label>
+            <select id="kode_toko" name="kode_toko" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                <option value="">-- Pilih Toko --</option>
+                </select>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label for="nama_toko">Nama Toko:</label>
+            <input type="text" id="nama_toko" name="nama_toko" readonly required style="width: 100%; padding: 8px; margin-top: 5px; background-color: #eee;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label for="auditor_name">Nama Auditor:</label>
+            <input type="text" id="auditor_name" name="auditor_name" required style="width: 100%; padding: 8px; margin-top: 5px;">
+        </div>
+
+        <h2>Checklist Audit</h2>
+        <div id="checklist-container">
+            </div>
+
+        <button type="submit" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px;">Submit & Lihat Skor</button>
+    </form>
+    
+    <div id="score-output" class="score-result">
+        <h3>Hasil Score Audit</h3>
+        <p><strong>Kode Toko:</strong> <span id="out_kode_toko"></span></p>
+        <p><strong>Nama Toko:</strong> <span id="out_nama_toko"></span></p>
+        <hr>
+        <p><strong>Score Reguler:</strong> <span id="out_score_reguler"></span></p>
+        <p><strong>Score Fresh:</strong> <span id="out_score_fresh"></span></p>
+        <p><strong>TOTAL SCORE:</strong> <span id="out_total_score"></span></p>
     </div>
-    <div class="actions">
-      <button id="btnScroll" class="btn-primary">Mulai Audit (scroll)</button>
-      <button id="btnResetAll" class="btn-ghost">Reset Checklist</button>
-    </div>
-    <p class="muted">Setiap klik "Submit" akan menyimpan hasil ke Google Sheet. Gunakan tombol "Export Excel" untuk mendownload semua rekap & detail (2 sheets).</p>
-  </div>
 
-  <form id="auditForm"></form>
+</div>
 
-  <div class="sticky-actions">
-    <button id="btnSubmit" class="btn-primary">Submit / Hitung Skor</button>
-    <button id="btnExport" class="btn-ghost">Export Excel (rekap + detail)</button>
-    <button id="btnClearRekap" class="btn-ghost">Hapus Semua Rekap</button>
-  </div>
-
-  <div id="rekapArea" class="card" style="display:none">
-    <h2>Rekap Semua Submit</h2>
-    <div id="rekapTable"></div>
-    <p class="small">Total entri: <span id="rekapCount">0</span></p>
-  </div>
-
-  <script>
-    /* ========== DATA ========== */
-    /* Mapping toko */
-    const tokoMap = {
-      "SG04":"SURYANATA - SAMARINDA [STA]",
-      "SG05":"PANGERAN ANTASARI - SAMARINDA [PAI]",
-      "SG06":"PATIMURA - SAMARINDA [PRA]",
-      "SG08":"JL JAKARTA - SAMARINDA [JKT]",
-      "SG02":"INDRAKILA 1 - BALIKPAPAN [IND1]",
-      "SG11":"CENDANA - SAMARINDA [CEN]",
-      "SG15":"SULTAN ALIMUDIN - SAMARINDA [SNA]",
-      "SG12":"BUNG TOMO - SAMARINDA [BGT]",
-      "SG09":"AHMAD DAHLAN - SAMARINDA [ADN]",
-      "SG10":"IR.SUTAMI - SAMARINDA [SUT]",
-      "SG13":"AHMAD YANI - SAMARINDA [ANI]",
-      "SG14":"LAMBUNG MANGKURAT - SAMARINDA [LMT]",
-      "SG27":"PESUT - TENGGARONG [PST]",
-      "SG30":"SEPINGGAN BARU - BALIKPAPAN [SBU]",
-      "SG29":"YOS SUDARSO - SANGATTA [YSS]",
-      "SG32":"DIPONEGORO - SANGATTA [DOS]",
-      "SG36":"DIPONEGORO - GROGOT [DGT]",
-      "SG34":"BATU SOPANG 1 [BSG1]",
-      "SG37":"YOS SUDARSO 2 - SANGATTA [YSS2]",
-      "SG38":"BENGALON [BGLN]"
-            ,"SG42":"JENSUD - TANAH GROGOT [JTG]",
-      "SG41":"A YANI - TANAH GROGOT [AYTG]",
-      "SG43":"LOA IPUH - TENGGARONG [LOA]",
-      "SG40":"KUARO - GROGOT [KAO]",
-      "SG44":"JONE - GROGOT [JONE]",
-      "SG28":"LOA KULU - TENGGARONG [LOAK]",
-      "SG45":"LONG IKIS - GROGOT [LKIS]",
-      "SG46":"PETUNG - PENAJAM [PGP]",
-      "SG47":"L2 - TENGGARONG [L2T]",
-      "SG48":"TAPIS - GROGOT [TPR]",
-      "SG35":"BATU SOPANG 2 [BSG2]",
-      "SG22":"WACHID HASYIM - SAMARINDA [WAC]",
-      "SG19":"MIDI SOEKARNO HATTA 1 - SAMARINDA [SOE1]",
-      "SG20":"MIDI SOEKARNO HATTA 2 - SAMARINDA [SOE2]"
-      /* bisa teruskan semua sisa kode toko yang ada di script asli */
-    };
-
-    /* Checklist pilar */
-    const checklist = {
-      people: {
-        reguler: [
-          "Seragam/Penampilan Reguler",
-          "Tanda Pengenal ID Card Reguler",
-          "Tatap Salam Sapa dan Terimakasih",
-          "Inisiatif Penawaran dan Pelayanan",
-          "Jumlah Personil Sesuai Standar Reguler"
-          /* dst sesuai script asli */
-        ],
-        fresh: [
-          "Seragam/Penampilan Fresh",
-          "Tanda Pengenal/ID Card Fresh",
-          "Jumlah Personil Sesuai Standard Fresh"
-          /* dst sesuai script asli */
-        ]
-      },
-      process: {
-        reguler: [
-          "Update Price tag",
-          "Optimalisasi Rak",
-          "Pencatatan Retur/Void Penjualan"
-          /* dst */
-        ],
-        fresh: [
-          "Administrasi Buku Aktivitas Harian Fresh",
-          "Administrasi Repacking"
-          /* dst */
-        ]
-      },
-      product: {
-        reguler: [
-          "Planogram",
-          "FEFO/FIFO",
-          "Kemasan"
-          /* dst */
-        ],
-        fresh: [
-          "Kebersihan dan Kualitas Buah/Sayur dan Bumbu Dapur",
-          "Kebersihan dan Kualitas Dairy, Deli, dan Frozen Food"
-          /* dst */
-        ]
-      },
-      place: {
-        reguler: [
-          "Kebersihan dan Kerapian Halaman Parkir",
-          "Kebersihan dan Kerapian Teras"
-          /* dst */
-        ],
-        fresh: [
-          "Kebersihan dan Kerapian Chiller, Freezer, Kontainer, Rak Buah, dan Meja Display"
-          /* dst */
-        ]
-      }
-    };
-
-    /* ========== Populate dropdown toko ========== */
-    const kodeSelect = document.getElementById('kodeToko');
-    Object.keys(tokoMap).sort().forEach(k => {
-      const o = document.createElement('option');
-      o.value = k;
-      o.textContent = k;
-      kodeSelect.appendChild(o);
-    });
-    kodeSelect.addEventListener('change', () => {
-      document.getElementById('namaToko').value = tokoMap[kodeSelect.value] || '';
-    });
-
-    /* ========== Render Checklist ========== */
-    const form = document.getElementById('auditForm');
-    function renderChecklist(){
-      form.innerHTML = '';
-      Object.keys(checklist).forEach(pilarKey => {
-        const pilar = checklist[pilarKey];
-        const card = document.createElement('div');
-        card.className = 'card';
-        const h2 = document.createElement('h2');
-        h2.textContent = pilarKey.charAt(0).toUpperCase() + pilarKey.slice(1);
-        card.appendChild(h2);
-
-        // Reguler
-        const h3r = document.createElement('h3');
-        h3r.className = 'muted';
-        h3r.textContent = 'Reguler';
-        card.appendChild(h3r);
-        pilar.reguler.forEach((q, idx) => {
-          const lbl = document.createElement('label');
-          const cb = document.createElement('input');
-          cb.type = 'checkbox';
-          cb.dataset.pilar = pilarKey;
-          cb.dataset.sub = 'reguler';
-          cb.dataset.idx = idx + 1;
-          cb.dataset.q = q;
-          cb.name = `${pilarKey}_reg`;
-          cb.id = `${pilarKey}_reg_${idx+1}`;
-          lbl.appendChild(cb);
-          lbl.appendChild(document.createTextNode(`${idx+1}. ${q}`));
-          card.appendChild(lbl);
-        });
-
-        // Fresh
-        const h3f = document.createElement('h3');
-        h3f.className = 'muted';
-        h3f.textContent = 'Fresh';
-        card.appendChild(h3f);
-        pilar.fresh.forEach((q, idx) => {
-          const lbl = document.createElement('label');
-          const cb = document.createElement('input');
-          cb.type = 'checkbox';
-          cb.dataset.pilar = pilarKey;
-          cb.dataset.sub = 'fresh';
-          cb.dataset.idx = idx + 1;
-          cb.dataset.q = q;
-          cb.name = `${pilarKey}_fresh`;
-          cb.id = `${pilarKey}_fresh_${idx+1}`;
-          lbl.appendChild(cb);
-          lbl.appendChild(document.createTextNode(`${idx+1}. ${q}`));
-          card.appendChild(lbl);
-        });
-
-        form.appendChild(card);
-      });
-    }
-    renderChecklist();
-    /* ========== GLOBAL REKAP ========== */
-    let rekapSummary = []; // {kode,nama,scoreReg,scoreFresh,totalScore,datetime}
-    let rekapDetail = [];  // {kode,nama,pilar,sub,nomor,pertanyaan,jawaban,datetime}
-
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyE8wCHLo5Qg9qOdDnPWVZrt4MLJAMMrV8DsYrqp7AxGiCtgJ0q7hIT0CiVso94vsbcUA/exec';
-
-    /* ========== BUTTON HANDLERS ========== */
-    document.getElementById('btnScroll').addEventListener('click', ()=> form.scrollIntoView({behavior:'smooth'}));
-    document.getElementById('btnResetAll').addEventListener('click', ()=> { if(!confirm('Reset semua checklist di form ini?')) return; form.reset(); });
-
-    /* ========== SUBMIT / HITUNG SKOR ========== */
-    document.getElementById('btnSubmit').addEventListener('click', ()=>{
-      const kode = document.getElementById('kodeToko').value.trim();
-      const nama = document.getElementById('namaToko').value.trim();
-      if(!kode || !nama){ alert('Pilih Kode Toko terlebih dahulu.'); return; }
-
-      const weights = { people:0.1, product:0.4, process:0.4, place:0.1 };
-      const pilars = ['people','product','process','place'];
-      let scoreReg = 0, scoreFresh = 0;
-      const datetime = new Date().toLocaleString();
-
-      pilars.forEach(p=>{
-        // reguler
-        const checksReg = Array.from(document.querySelectorAll(`input[name=${p}_reg]`));
-        const totalRegChecks = checksReg.length;
-        const yesReg = checksReg.filter(c=>c.checked).length;
-        scoreReg += totalRegChecks ? (yesReg/totalRegChecks*100)*weights[p] : 0;
-
-        // fresh
-        const checksFresh = Array.from(document.querySelectorAll(`input[name=${p}_fresh]`));
-        const totalFreshChecks = checksFresh.length;
-        const yesFresh = checksFresh.filter(c=>c.checked).length;
-        scoreFresh += totalFreshChecks ? (yesFresh/totalFreshChecks*100)*weights[p] : 0;
-
-        // push detail
-        checksReg.forEach((c, idx)=>{ rekapDetail.push({ kode,nama,pilar:p.charAt(0).toUpperCase()+p.slice(1), sub:'Reguler', nomor:idx+1, pertanyaan:c.dataset.q, jawaban:c.checked?'Ya':'Tidak', datetime }); });
-        checksFresh.forEach((c, idx)=>{ rekapDetail.push({ kode,nama,pilar:p.charAt(0).toUpperCase()+p.slice(1), sub:'Fresh', nomor:idx+1, pertanyaan:c.dataset.q, jawaban:c.checked?'Ya':'Tidak', datetime }); });
-      });
-
-      const finalReg = parseFloat(scoreReg.toFixed(2));
-      const finalFresh = parseFloat(scoreFresh.toFixed(2));
-      const totalScore = parseFloat(((finalReg+finalFresh)/2).toFixed(2));
-
-      rekapSummary.push({ kode,nama,scoreReg:finalReg,scoreFresh:finalFresh,totalScore,datetime });
-
-      refreshRekapUI();
-      document.getElementById('rekapArea').style.display='block';
-      document.getElementById('rekapArea').scrollIntoView({behavior:'smooth'});
-
-      // Kirim ke Google Script
-      fetch(GOOGLE_SCRIPT_URL, {
-        method:'POST',
-        mode:'no-cors',
-        headers:{ 'Content-Type':'application/json' },
-        body: JSON.stringify({ summary:{ kode,nama,scoreReg:finalReg,scoreFresh:finalFresh,totalScore,datetime }, detail: rekapDetail })
-      }).catch(err=>console.log('Error kirim ke Google Script:', err));
-    });
-
-    /* ========== REFRESH REKAP UI ========== */
-    function refreshRekapUI(){
-      const area = document.getElementById('rekapTable');
-      area.innerHTML = '';
-      if(rekapSummary.length === 0){ document.getElementById('rekapArea').style.display='none'; return; }
-
-      const tbl = document.createElement('table');
-      const thead = document.createElement('thead');
-      thead.innerHTML = '<tr><th>#</th><th>Kode Toko</th><th>Nama Toko</th><th>Score Reguler</th><th>Score Fresh</th><th>Total Score</th><th>Tanggal</th></tr>';
-      tbl.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-      rekapSummary.forEach((r,i)=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${i+1}</td><td>${r.kode}</td><td style="text-align:left;padding-left:8px">${r.nama}</td><td>${r.scoreReg}%</td><td>${r.scoreFresh}%</td><td>${r.totalScore}%</td><td>${r.datetime}</td>`;
-        tbody.appendChild(tr);
-      });
-      tbl.appendChild(tbody);
-      area.appendChild(tbl);
-      document.getElementById('rekapCount').textContent = rekapSummary.length;
-    }
-
-    /* ========== CLEAR REKAP ========== */
-    document.getElementById('btnClearRekap').addEventListener('click', ()=>{
-      if(!confirm('Hapus semua rekap summary & detail dari memori browser?')) return;
-      rekapSummary=[]; rekapDetail=[];
-      refreshRekapUI();
-      alert('Semua rekap telah dihapus (hanya di memori browser).');
-    });
-
-    /* ========== EXPORT EXCEL ========== */
-    document.getElementById('btnExport').addEventListener('click', ()=>{
-      if(rekapSummary.length===0){ alert('Belum ada rekap. Submit minimal 1 toko dulu.'); return; }
-
-      const header1 = ['Kode Toko','Nama Toko','Score Reguler (%)','Score Fresh (%)','Total Score (%)','Tanggal'];
-      const data1 = [header1];
-      rekapSummary.forEach(r=>data1.push([r.kode,r.nama,r.scoreReg,r.scoreFresh,r.totalScore,r.datetime]));
-
-      const header2 = ['Kode Toko','Nama Toko','Pilar','Sub Pilar','Nomor Checklist','Pertanyaan','Jawaban','Tanggal'];
-      const data2 = [header2];
-      rekapDetail.forEach(d=>data2.push([d.kode,d.nama,d.pilar,d.sub,d.nomor,d.pertanyaan,d.jawaban,d.datetime]));
-
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data1), 'Rekap_Summary');
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data2), 'Detail_Checklist');
-
-      const wbout = XLSX.write(wb,{bookType:'xlsx',type:'array'});
-      const blob = new Blob([wbout],{type:"application/octet-stream"});
-      const filename = `Audit_Rekap_${new Date().toISOString().slice(0,10)}.xlsx`;
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = filename;
-      link.click();
-    });
-  </script>
+<script src="app.js"></script>
 </body>
 </html>
-
