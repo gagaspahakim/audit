@@ -5,16 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplikasi Simulasi Audit - Store</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h2 { border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 20px; }
-        .audit-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dotted #ccc; }
-        .audit-item label { flex-grow: 1; margin-right: 10px; }
-        .audit-item .options input { margin-left: 15px; }
-        .score-result { margin-top: 30px; padding: 15px; border: 2px solid #007bff; border-radius: 5px; background-color: #e9f5ff; display: none; }
-        .score-result h3 { color: #007bff; }
-        .pilar-section { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
-        .kategori-section { margin-top: 15px; border-left: 3px solid #007bff; padding-left: 10px; }
+        /* Gaya Dasar */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f0f2f5; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #007bff; text-align: center; margin-bottom: 20px; }
+        h2 { border-bottom: 2px solid #007bff; padding-bottom: 8px; margin-top: 25px; color: #333; font-size: 1.5em; }
+        
+        /* Gaya Form Input */
+        input[type="text"], select { 
+            width: 100%; 
+            padding: 10px; 
+            margin-top: 5px; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            box-sizing: border-box; /* Penting untuk width 100% */
+        }
+        #nama_toko { background-color: #f8f8f8; color: #555; }
+        
+        /* Gaya Checklist */
+        .pilar-section { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 8px; background-color: #ffffff; }
+        .pilar-section h3 { margin-top: 0; color: #0056b3; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .kategori-section { margin-top: 15px; border-left: 4px solid #007bff; padding-left: 10px; background-color: #f9f9f9; padding: 10px; border-radius: 4px; }
+        .kategori-section h4 { color: #333; margin-top: 0; font-size: 1.1em; }
+
+        /* Gaya Item Audit (Kunci Responsif) */
+        .audit-item { 
+            display: flex; 
+            flex-direction: column; /* Tumpuk item audit dan opsi di layar kecil */
+            padding: 10px 0; 
+            border-bottom: 1px dotted #ccc; 
+        }
+        .audit-item label { 
+            flex-grow: 1; 
+            margin-right: 0; /* Hapus margin di layar kecil */
+            font-weight: 500; 
+            margin-bottom: 8px; /* Jarak antara item dan pilihan radio */
+        }
+        .audit-item .options {
+            display: flex; /* Opsi Ya/Tidak berjejer horizontal */
+            justify-content: flex-start;
+            gap: 20px; /* Jarak antar Ya dan Tidak */
+            padding-left: 0;
+        }
+        .audit-item .options input { margin-left: 0; width: auto; } /* Atur lebar radio button */
+        
+        /* Gaya Tombol */
+        button[type="submit"] { 
+            width: 100%;
+            padding: 12px; 
+            background-color: #28a745; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            margin-top: 25px;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+        }
+        button[type="submit"]:hover { background-color: #218838; }
+
+        /* Gaya Output Skor */
+        .score-result { 
+            margin-top: 30px; 
+            padding: 20px; 
+            border: 2px solid #007bff; 
+            border-radius: 8px; 
+            background-color: #e9f5ff; 
+            display: none; 
+        }
+        .score-result h3 { color: #007bff; margin-top: 0; }
+        .score-result hr { border-top: 1px solid #007bff; margin: 15px 0; }
+
+        /* Media Query untuk Layar Lebar (Tablet/Desktop) */
+        @media (min-width: 600px) {
+            .audit-item { 
+                flex-direction: row; /* Kembali ke tampilan berdampingan */
+                align-items: center; 
+            }
+            .audit-item label { 
+                margin-bottom: 0;
+            }
+            .audit-item .options {
+                padding-left: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -27,24 +101,24 @@
         <h2>Data Toko & Auditor</h2>
         <div style="margin-bottom: 15px;">
             <label for="kode_toko">Pilih Kode Toko:</label>
-            <select id="kode_toko" name="kode_toko" required style="width: 100%; padding: 8px; margin-top: 5px;">
+            <select id="kode_toko" name="kode_toko" required>
                 <option value="">-- Pilih Toko --</option>
                 </select>
         </div>
         <div style="margin-bottom: 15px;">
             <label for="nama_toko">Nama Toko:</label>
-            <input type="text" id="nama_toko" name="nama_toko" readonly required style="width: 100%; padding: 8px; margin-top: 5px; background-color: #eee;">
+            <input type="text" id="nama_toko" name="nama_toko" readonly required>
         </div>
         <div style="margin-bottom: 15px;">
             <label for="auditor_name">Nama Auditor:</label>
-            <input type="text" id="auditor_name" name="auditor_name" required style="width: 100%; padding: 8px; margin-top: 5px;">
+            <input type="text" id="auditor_name" name="auditor_name" required>
         </div>
 
         <h2>Checklist Audit</h2>
         <div id="checklist-container">
             </div>
 
-        <button type="submit" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px;">Submit & Lihat Skor</button>
+        <button type="submit">Submit & Lihat Skor</button>
     </form>
     
     <div id="score-output" class="score-result">
