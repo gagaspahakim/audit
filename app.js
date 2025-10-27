@@ -187,6 +187,8 @@ const TOKO_DATA = {
 "SG2N":"PEMAJATAN BANJAR - BANJARMASIN [PMJN]",
 "SG2Q":"SENTOSA - SAMARINDA [SOSA]",
 "SG2P":"WAHAU BARU- WAHAU [WABA]"
+"001G":"PRAMUKA SUPER - BANJARMASIN [PMKS]"
+"SG2R":"HANDIL BAKTI (FR) - BANJARMASIN [HABE]"
 };
 
 
@@ -458,3 +460,4 @@ async function handleFormSubmit(event) {
 
 // Inisialisasi aplikasi saat dokumen selesai dimuat
 document.addEventListener('DOMContentLoaded', initApp);
+
